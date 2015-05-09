@@ -1,0 +1,35 @@
+defmodule DeDupman do
+  def hello do
+    IO.puts "/home/anders/Pictures/billudden/IMGP0849.jpg"
+  end
+  
+  def get_files(path) do
+    Path.wildcard(path <> "/**/*.jpg")
+  end
+  #----------------------------------------------------
+  def put_in_map([], utdata) do
+    utdata
+  end
+  
+  def put_in_map([head | tail], utdata) do
+    filnamn = Path.basename(head)
+    
+    if Dict.has_key?(utdata, filnamn) do
+      #IO.puts "---" <> filnamn
+      utdata = Dict.update!(utdata, filnamn, fn(val) -> [val, Path.dirname(head)] end)
+    else
+      #IO.puts "..." <> filnamn
+      utdata = Dict.put(utdata, filnamn, Path.dirname(head))
+    end
+
+    utdata = put_in_map(tail, utdata)
+  end
+  #----------------------------------------------------
+
+  
+  def main(_args) do
+    db = put_in_map(get_files("/home/anders/Pictures"), HashDict.new)
+    IO.inspect db
+    IO.puts "done"
+  end
+end

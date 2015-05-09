@@ -1,0 +1,4 @@
+DeDupman
+========
+
+** TODO: Add description **
